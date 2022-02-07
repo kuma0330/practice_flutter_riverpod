@@ -26,14 +26,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends ConsumerWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends ConsumerState<MyHomePage> {
+  @override
+  Scaffold build(BuildContext context) {
+    // print('rebuild');
     return Scaffold(
       appBar: AppBar(
-        title: Text(ref.watch(titleProvider)),
+        title: Text(
+          ref.watch(titleProvider),
+        ),
       ),
       body: Center(
         child: Column(
@@ -53,7 +61,7 @@ class MyHomePage extends ConsumerWidget {
         onPressed: () => ref.read(countProvider.state).state++,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
