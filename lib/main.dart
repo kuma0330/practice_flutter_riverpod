@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:practice_riverpod/provider.dart';
 
+import 'data/count_data.dart';
+
 void main() {
   runApp(
     ProviderScope(
@@ -52,19 +54,37 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               ref.watch(messageProvider),
             ),
             Text(
-              ref.watch(countProvider).toString(),
+              ref.watch(countDataProvider).count.toString(),
               style: Theme.of(context).textTheme.headline4,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 FloatingActionButton(
-                  onPressed: () => ref.read(countProvider.state).state++,
+                  onPressed: () {
+                    CountData countData =
+                        ref.read(countDataProvider.state).state;
+
+                    ref.read(countDataProvider.state).state =
+                        countData.copyWith(
+                      count: countData.count + 1,
+                      countUp: countData.countUp + 1,
+                    );
+                  },
                   tooltip: 'Decrement',
                   child: const Icon(CupertinoIcons.plus),
                 ),
                 FloatingActionButton(
-                  onPressed: () => ref.read(countProvider.state).state++,
+                  onPressed: () {
+                    CountData countData =
+                        ref.read(countDataProvider.state).state;
+
+                    ref.read(countDataProvider.state).state =
+                        countData.copyWith(
+                      count: countData.count - 1,
+                      countDown: countData.countDown - 1,
+                    );
+                  },
                   tooltip: 'Increment',
                   child: const Icon(CupertinoIcons.minus),
                 ),
@@ -73,15 +93,25 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('1'),
-                Text('2'),
+                Text(
+                  ref.watch(countDataProvider).countUp.toString(),
+                ),
+                Text(
+                  ref.watch(countDataProvider).countDown.toString(),
+                ),
               ],
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => ref.read(countProvider.state).state++,
+        onPressed: () {
+          ref.read(countDataProvider.state).state = CountData(
+            count: 0,
+            countUp: 0,
+            countDown: 0,
+          );
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.refresh),
       ),
