@@ -7,6 +7,8 @@ class Logic {
     countDown: 0,
   );
 
+  get countData => _countData;
+
   void increase() {
     _countData = _countData.copyWith(
       count: _countData.count + 1,
