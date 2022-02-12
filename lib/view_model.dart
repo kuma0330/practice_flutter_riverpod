@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:practice_riverpod/logic.dart';
+import 'package:practice_riverpod/logic/button_animation_logic.dart';
+import 'package:practice_riverpod/logic/logic.dart';
 import 'package:practice_riverpod/provider.dart';
 
 class ViewModel {
   Logic _logic = Logic();
+
+  late ButtonAnimationLogic _buttonAnimationLogicPlus;
+
   late WidgetRef _ref;
 
-  void setRef(WidgetRef ref) {
+  void setRef(WidgetRef ref, TickerProvider tickerProvider) {
     this._ref = ref;
+
+    _buttonAnimationLogicPlus = ButtonAnimationLogic(tickerProvider);
   }
 
   get count => _ref.watch(countDataProvider).count.toString();
@@ -20,9 +26,11 @@ class ViewModel {
       .watch(countDataProvider.select((value) => value.countDown))
       .toString();
 
+  get animationPlus => _buttonAnimationLogicPlus.animationScale;
+
   void onIncrease() {
     _logic.increase();
-
+    _buttonAnimationLogicPlus.start();
     _ref.watch(countDataProvider.state).state = _logic.countData;
   }
 
