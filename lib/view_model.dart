@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:practice_riverpod/logic/button_animation_logic.dart';
 import 'package:practice_riverpod/logic/count_data_changed_notifier.dart';
 import 'package:practice_riverpod/logic/logic.dart';
+import 'package:practice_riverpod/logic/shared_preferences_logic.dart';
 import 'package:practice_riverpod/provider.dart';
 
 import 'data/count_data.dart';
@@ -40,7 +41,11 @@ class ViewModel {
       _buttonAnimationLogicPlus,
       _buttonAnimationLogicMinus,
       _buttonAnimationLogicReset,
+      SharedPreferencesLogic(),
     ];
+
+    SharedPreferencesLogic.read()
+        .then((value) => ref.read(countDataProvider.state).state = value);
   }
 
   get count => _ref.watch(countDataProvider).count.toString();
@@ -52,16 +57,12 @@ class ViewModel {
       .watch(countDataProvider.select((value) => value.countDown))
       .toString();
 
-  get animationPlusScale => _buttonAnimationLogicPlus.animationScale;
-  get animationPlusRotation => _buttonAnimationLogicPlus.animationRotation;
   get animationPlusCombination =>
       _buttonAnimationLogicPlus.animationCombination;
 
-  get animationMinus => _buttonAnimationLogicMinus.animationScale;
   get animationMinusCombination =>
       _buttonAnimationLogicMinus.animationCombination;
 
-  get animationReset => _buttonAnimationLogicReset.animationScale;
   get animationResetCombination =>
       _buttonAnimationLogicReset.animationCombination;
 
